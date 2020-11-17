@@ -9,9 +9,10 @@ using namespace Eigen;
 
 namespace smk
 {
-
+#ifndef ESP32_DSP // uses array implementation with DSP
+#ifdef ARRAY_IMPLEMENTATION
 typedef Matrix<float,4,4,RowMajor> Matrix4fRM;
-
+#endif // ARRAY_IMPLEMENTATION
 Matrix4f homogRotXyz(float x_ang, float y_ang, float z_ang)
 {
   // Create 3d transformation, and execute x, y, and z rotations
@@ -28,7 +29,6 @@ Matrix4f homogRotXyz(float x_ang, float y_ang, float z_ang)
   return Map<Matrix4fRM>(&Rxyz[0][0], 4, 4);
 #endif //ARRAY_IMPLEMENTATION
 }
-
 
 Matrix4f homogTransXyz(float x, float y, float z)
 {
@@ -169,6 +169,7 @@ Matrix4f htLegLeftBack(const Matrix4f& ht_body_center, float body_length, float 
   return Map<Matrix4fRM>(&array_ht_bcXleg[0][0], 4, 4);
 #endif //ARRAY_IMPLEMENTATION
 }
+#endif // ESP32_DSP
 
 #ifdef ARRAY_IMPLEMENTATION
 static void array_ht0To1(float rot_ang, float link_length, float ht_0_to_1[][4]) {
@@ -219,6 +220,7 @@ void array_ht0To4(const JointAngles& joint_angles,
 }
 #endif //ARRAY_IMPLEMENTATION
 
+#ifndef ESP32_DSP // uses array implementation with DSP
 Matrix4f ht0To1(float rot_ang, float link_length) {
 #ifndef ARRAY_IMPLEMENTATION
   // Build up the matrix as from the paper
@@ -287,7 +289,7 @@ Matrix4f ht0To4(const JointAngles& joint_angles,
   return (Map<Matrix4fRM>(&ht_0_to_4[0][0], 4, 4));
 #endif //ARRAY_IMPLEMENTATION
 }
-
+#endif // ESP32_DSP
 
 JointAngles ikine(const Point& point, const LinkLengths& link_lengths, bool is_leg_12) {
   using namespace std;
@@ -439,7 +441,6 @@ void array_htLegRightBack(const float ht_body_center[][4], float body_length, fl
 
   // Build up matrix representing right back leg ht. First, a pi/2 rotation in y
   float htLeg[4][4] = {0,};
-  // std::cout << "homogRotXyz: \n" << homogRotXyz(0.0f, M_PI/2.0f, 0.0) << "\n";
   array_homogRotXyz(0.0f, M_PI/2.0f, 0.0, htLeg);
 
   // Next, add the linear translation portion
@@ -454,7 +455,6 @@ void array_htLegRightFront(const float ht_body_center[][4], float body_length, f
 
   // Build up matrix representing right back leg ht. First, a pi/2 rotation in y
   float htLeg[4][4] = {0,};
-  // std::cout << "homogRotXyz: \n" << homogRotXyz(0.0f, M_PI/2.0f, 0.0) << "\n";
   array_homogRotXyz(0.0f, M_PI/2.0f, 0.0, htLeg);
 
   // Next, add the linear translation portion
@@ -469,7 +469,6 @@ void array_htLegLeftFront(const float ht_body_center[][4], float body_length, fl
 
   // Build up matrix representing right back leg ht. First, a pi/2 rotation in y
   float htLeg[4][4] = {0,};
-  // std::cout << "homogRotXyz: \n" << homogRotXyz(0.0f, M_PI/2.0f, 0.0) << "\n";
   array_homogRotXyz(0.0f, -M_PI/2.0f, 0.0, htLeg);
 
   // Next, add the linear translation portion
@@ -484,7 +483,6 @@ void array_htLegLeftBack(const float ht_body_center[][4], float body_length, flo
 
   // Build up matrix representing right back leg ht. First, a pi/2 rotation in y
   float htLeg[4][4] = {0,};
-  // std::cout << "homogRotXyz: \n" << homogRotXyz(0.0f, M_PI/2.0f, 0.0) << "\n";
   array_homogRotXyz(0.0f, -M_PI/2.0f, 0.0, htLeg);
 
   // Next, add the linear translation portion

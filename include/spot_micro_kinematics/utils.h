@@ -1,9 +1,9 @@
 #pragma once // So header is only included once
 
 #define ARRAY_IMPLEMENTATION
-
+#ifndef ESP32_DSP // uses array implementation with DSP
 #include <eigen3/Eigen/Geometry>
-
+#endif // ESP32_DSP
 namespace smk
 {
 
@@ -24,7 +24,7 @@ struct JointAngles {
   float ang2;
   float ang3;
 };
-
+#ifndef ESP32_DSP // uses array implementation with DSP
 // Returns a 4x4 Matrix that represents a homogeneous rotation matrix
 // in the order x, y, z. Input angles are in units radians.
 // A convenience wrapper around Eigen::Transform build up
@@ -90,7 +90,7 @@ Eigen::Matrix4f ht3To4(float rot_ang, float link_length);
 // quadruped leg
 Eigen::Matrix4f ht0To4(const JointAngles& joint_angles, 
                        const LinkLengths& link_lengths);
-
+#endif // ESP32_DSP
 // Returns the joint angles of a leg after running the inverse kinematics on a
 // quadruped leg.
 // Last argument, an optional boolean input, specifies whether the equations for

@@ -1,4 +1,6 @@
+#ifndef ESP32_DSP // uses array implementation with DSP
 #include <eigen3/Eigen/Geometry>
+#endif // ESP32_DSP
 
 #include "spot_micro_kinematics/utils.h"
 #include "spot_micro_kinematics/spot_micro_leg.h"
@@ -34,6 +36,7 @@ void SpotMicroLeg::setFootPosLocalCoordinates(const Point& point) {
   setAngles(joint_angles);
 }
 
+#ifndef ESP32_DSP // uses array implementation with DSP
 void SpotMicroLeg::setFootPosGlobalCoordinates(const Point& point, 
                                                const Matrix4f& ht_leg_start) {
 
@@ -65,7 +68,7 @@ Point SpotMicroLeg::getFootPosGlobalCoordinates(const Matrix4f& ht_leg_start) {
                         .z = ht_foot(2,3) };
   return return_point;
 }
-
+#endif // ESP32_DSP
 
 JointAngles SpotMicroLeg::getLegJointAngles() {
   return joint_angles_;

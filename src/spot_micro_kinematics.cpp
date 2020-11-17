@@ -1,5 +1,6 @@
+#ifndef ESP32_DSP // uses array implementation with DSP
 #include <eigen3/Eigen/Geometry>
-#include <iostream>
+#endif // ESP32_DSP
 
 #include "spot_micro_kinematics/utils.h"
 #include "spot_micro_kinematics/spot_micro_leg.h"
@@ -34,9 +35,7 @@ SpotMicroKinematics::SpotMicroKinematics(float x, float y, float z,
   left_back_leg_   = SpotMicroLeg(joint_angles_temp, link_lengths_temp, false);
 }
 
-#define ARRAY_IMPLEMENTATION
 #ifdef ARRAY_IMPLEMENTATION
-typedef Matrix<float,4,4,RowMajor> Matrix4fRM;
 void SpotMicroKinematics::array_getBodyHt(float ht[][4]) {
   float Txyz[4][4] = {0,}; 
   array_homogTransXyz(x_, y_, z_, Txyz);
@@ -45,6 +44,9 @@ void SpotMicroKinematics::array_getBodyHt(float ht[][4]) {
   dsps_add_f32_ae32((float*) Txyz, (float*) Rxyz, (float*) ht, 16, 1, 1, 1);
 }
 #endif //ARRAY_IMPLEMENTATION
+
+#ifndef ESP32_DSP // uses array implementation with DSP
+typedef Matrix<float,4,4,RowMajor> Matrix4fRM;
 
 Matrix4f SpotMicroKinematics::getBodyHt() {
   // Euler angle order is phi, psi, theta because the axes of the robot are x
@@ -57,7 +59,7 @@ Matrix4f SpotMicroKinematics::getBodyHt() {
   return(homogTransXyz(x_, y_, z_) * homogRotXyz(phi_, psi_, theta_));
 #endif // ARRAY_IMPLEMENTATION
 }
-
+#endif // ESP32_DSP
 
 void SpotMicroKinematics::setLegJointAngles(
     const LegsJointAngles& four_legs_joint_angs) {

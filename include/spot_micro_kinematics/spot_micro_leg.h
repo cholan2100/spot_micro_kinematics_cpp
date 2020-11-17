@@ -1,9 +1,10 @@
 #pragma once
 
-#include <eigen3/Eigen/Geometry>
-
 #include "spot_micro_kinematics/utils.h"
 
+#ifndef ESP32_DSP // uses array implementation with DSP
+#include <eigen3/Eigen/Geometry>
+#endif // ESP32_DSP
 
 namespace smk {
 
@@ -25,6 +26,7 @@ class SpotMicroLeg {
   // Set the foot position in the leg's local coordinate system
   void setFootPosLocalCoordinates(const Point& point);
 
+#ifndef ESP32_DSP // uses array implementation with DSP
   // Set the foot position in global coordinate system given a desired point, at
   // the ht representing the start of the leg's coordinate system
   void setFootPosGlobalCoordinates(const Point& point, 
@@ -33,6 +35,7 @@ class SpotMicroLeg {
   // Returns the foot position in the global coordinate system given the ht
   // representing the start of the leg's coordinate system
   Point getFootPosGlobalCoordinates(const Eigen::Matrix4f& ht_leg_start);
+#endif // ESP32_DSP
 
   // Returns the three joint angles, ang1, ang2, ang3
   JointAngles getLegJointAngles();
