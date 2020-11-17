@@ -1,4 +1,7 @@
 #pragma once // So header is only included once
+#ifdef ESP_PLATFORM
+#define ESP32_DSP // use DSP on ESP32
+#endif // ESP_PLATFORM
 
 #define ARRAY_IMPLEMENTATION
 #ifndef ESP32_DSP // uses array implementation with DSP

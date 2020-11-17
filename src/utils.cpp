@@ -1,11 +1,9 @@
 #include "spot_micro_kinematics/utils.h"
 
-#include <iostream>
-#include <cmath>
-
+#ifndef ESP32_DSP // uses array implementation with DSP
 #include <eigen3/Eigen/Geometry>
-
 using namespace Eigen;
+#endif // ESP32_DSP
 
 namespace smk
 {
@@ -292,8 +290,6 @@ Matrix4f ht0To4(const JointAngles& joint_angles,
 #endif // ESP32_DSP
 
 JointAngles ikine(const Point& point, const LinkLengths& link_lengths, bool is_leg_12) {
-  using namespace std;
-
   // Initialize return struct
   JointAngles joint_angles;
 

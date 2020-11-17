@@ -1,12 +1,11 @@
-#ifndef ESP32_DSP // uses array implementation with DSP
-#include <eigen3/Eigen/Geometry>
-#endif // ESP32_DSP
-
 #include "spot_micro_kinematics/utils.h"
 #include "spot_micro_kinematics/spot_micro_leg.h"
 #include "spot_micro_kinematics/spot_micro_kinematics.h"
 
+#ifndef ESP32_DSP // uses array implementation with DSP
+#include <eigen3/Eigen/Geometry>
 using namespace Eigen;
+#endif // ESP32_DSP
 
 namespace smk {
 
