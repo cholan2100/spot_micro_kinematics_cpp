@@ -1,6 +1,7 @@
 #pragma once // So header is only included once
 #ifdef ESP_PLATFORM
 #define ESP32_DSP // use DSP on ESP32
+#include "esp_dsp.h"
 #endif // ESP_PLATFORM
 
 #define ARRAY_IMPLEMENTATION
@@ -102,7 +103,7 @@ Eigen::Matrix4f ht0To4(const JointAngles& joint_angles,
                    bool is_leg_12 = true); 
 
 #ifdef ARRAY_IMPLEMENTATION
-#ifndef ESP32_DSP //FIXME:
+#ifndef ESP32_DSP // uses array implementation with DSP
   int dspm_mult_f32_ansi(const float *A, const float *B, float *C, int m, int n, int k);
   void dsps_add_f32_ansi(const float *input1, const float *input2, float *output, int len, int step1, int step2, int step_out);
   #define dspm_mult_f32_ae32 dspm_mult_f32_ansi
