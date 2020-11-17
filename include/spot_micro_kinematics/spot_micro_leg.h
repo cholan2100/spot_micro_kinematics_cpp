@@ -37,6 +37,11 @@ class SpotMicroLeg {
   // Returns the three joint angles, ang1, ang2, ang3
   JointAngles getLegJointAngles();
 
+#ifdef ARRAY_IMPLEMENTATION
+  void array_setFootPosGlobalCoordinates(const Point& point, 
+                                   const float ht_leg_start[][4]);
+  Point array_getFootPosGlobalCoordinates(const float ht_leg_start[][4]);
+#endif //ARRAY_IMPLEMENTATION
 
  private:
   JointAngles joint_angles_; // Joint angles of the leg

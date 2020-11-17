@@ -1,5 +1,7 @@
 #pragma once // So header is only included once
 
+#define ARRAY_IMPLEMENTATION
+
 #include <eigen3/Eigen/Geometry>
 
 namespace smk
@@ -39,14 +41,12 @@ Eigen::Matrix4f homogTransXyz(float x, float y, float z);
 // reversed linear translation. See definition for more details
 Eigen::Matrix4f homogInverse(const Eigen::Matrix4f& ht);
 
-
 // Returns the homogeneous transformation matrix representing the coordinate
 // system and position of the right back leg of a quadruped. Assumes legs are
 // positioned in the corner of a rectangular plane defined by a length and
 // height. Requires the homogeneous transform representing the body center.
 Eigen::Matrix4f htLegRightBack(const Eigen::Matrix4f& ht_body_center,
                                float body_length, float body_width);
-
 
 // Returns the homogeneous transformation matrix representing the coordinate
 // system and position of the right front leg of a quadruped. Assumes legs are
@@ -68,7 +68,6 @@ Eigen::Matrix4f htLegLeftFront(const Eigen::Matrix4f& ht_body_center,
 // height. Requires the homogeneous transform representing the body center.
 Eigen::Matrix4f htLegLeftBack(const Eigen::Matrix4f& ht_body_center,
                               float body_length, float body_width);
-
 
 // Returns the homogeneous transformation matrix for joint 0 to 1 for a
 // quadruped leg
@@ -99,5 +98,21 @@ Eigen::Matrix4f ht0To4(const JointAngles& joint_angles,
  JointAngles ikine(const Point& point, const LinkLengths& link_lengths,
                    bool is_leg_12 = true); 
 
+#ifdef ARRAY_IMPLEMENTATION
+#ifndef ESP32_DSP //FIXME:
+  int dspm_mult_f32_ansi(const float *A, const float *B, float *C, int m, int n, int k);
+  void dsps_add_f32_ansi(const float *input1, const float *input2, float *output, int len, int step1, int step2, int step_out);
+  #define dspm_mult_f32_ae32 dspm_mult_f32_ansi
+  #define dsps_add_f32_ae32 dsps_add_f32_ansi
+#endif // ESP32_DSP
 
+void array_homogRotXyz(float x_ang, float y_ang, float z_ang, float Rxyz[][4]);
+void array_homogTransXyz(float x, float y, float z, float Txyz[][4]);
+void array_homogInverse(const float a[][4], float b[][4]);
+void array_htLegRightBack(const float ht_body_center[][4], float body_length, float body_width, float Trb[][4]);
+void array_htLegRightFront(const float ht_body_center[][4], float body_length, float body_width, float ret[][4]);
+void array_htLegLeftFront(const float ht_body_center[][4], float body_length, float body_width, float ret[][4]);
+void array_htLegLeftBack(const float ht_body_center[][4], float body_length, float body_width, float ret[][4]);
+void array_ht0To4(const JointAngles& joint_angles, const LinkLengths& link_lengths, float ht_0_to_4[][4]);
+#endif //ARRAY_IMPLEMENTATION
 }

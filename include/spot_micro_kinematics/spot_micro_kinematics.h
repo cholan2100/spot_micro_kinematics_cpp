@@ -57,6 +57,7 @@ class SpotMicroKinematics {
 
   // Returns the body center homogenous transformation matrix
   Eigen::Matrix4f getBodyHt();
+  void array_getBodyHt(float ht[][4]);
 
   // Sets the joint angles for the legs in the robot
   void setLegJointAngles(const LegsJointAngles& four_legs_joint_angs);
