@@ -11,10 +11,10 @@ namespace smk {
 
 SpotMicroKinematics::SpotMicroKinematics(float x, float y, float z,
                                          const SpotMicroConfig& smc) 
-    : x_(x),
+    : smc_(smc),
+      x_(x),
       y_(y),
-      z_(z),
-      smc_(smc) {
+      z_(z) {
 
   // Initialize other class attributes
   phi_ = 0.0f;

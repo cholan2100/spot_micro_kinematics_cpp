@@ -57,9 +57,11 @@ class SpotMicroKinematics {
   SpotMicroKinematics() = default;
 
   // Returns the body center homogenous transformation matrix
+#ifndef ESP32_DSP // uses array implementation with DSP
   Eigen::Matrix4f getBodyHt();
+#else // ESP32_DSP
   void array_getBodyHt(float ht[][4]);
-
+#endif // ESP32_DSP
   // Sets the joint angles for the legs in the robot
   void setLegJointAngles(const LegsJointAngles& four_legs_joint_angs);
 

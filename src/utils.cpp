@@ -3,6 +3,8 @@
 #ifndef ESP32_DSP // uses array implementation with DSP
 #include <eigen3/Eigen/Geometry>
 using namespace Eigen;
+#else
+#include "math.h"
 #endif // ESP32_DSP
 
 namespace smk
